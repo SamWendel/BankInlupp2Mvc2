@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BankInlupp2Mvc2.Controllers
 {
-    public class AccountController : Controller
+    public class LoginController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Login()
         {
             return View();
         }
