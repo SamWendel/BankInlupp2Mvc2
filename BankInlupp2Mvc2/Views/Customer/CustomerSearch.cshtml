@@ -1,12 +1,12 @@
-﻿@model BankInlupp2Mvc2.ViewModels.CustomerListViewModel
+﻿@model BankInlupp2Mvc2.ViewModels.CustomerSearchViewModel
 @{
-    ViewData["Title"] = "AccountList";
+    ViewData["Title"] = "CustomerSearch";
 }
-    <div>
-        <form asp-controller="Customer" asp-action="CustomerSearch" method="get">
-            <input type="text" name="q" class="form-control" placeholder="Search..">
-        </form>
-    </div>
+<div>
+    <form asp-controller="Customer" asp-action="CustomerSearch" method="get">
+        <input type="text" name="q" class="form-control" placeholder="Search..">
+    </form>
+</div>
 <br />
 <table>
     <tr>
@@ -17,13 +17,16 @@
         <th><a asp-action="CustomerList" asp-route-sortField="Birthday" asp-route-sortOrder="@(Model.SortField == "Birthday" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Birthdate</a></th>
     </tr>
 
-    @foreach (var item in Model.Customers)
+    Knummer, pnummer, namn, adress, city
+
+    @foreach (var item in Model.ResultList)
     {
         <tr>
             <td class="td">
                 <a asp-controller="Customer"
                    asp-action="CustomerDetails"
-                   asp-route-CustomerID="@item.CustomerId">@item.Givenname</a>
+                   asp-route-Givenname="@item.Givenname"
+                   asp-route-Surname="@item.Surname">@item.Givenname</a>
             </td>
             <td class="td">@item.Surname</td>
             <td class="td">@item.CustomerId</td>

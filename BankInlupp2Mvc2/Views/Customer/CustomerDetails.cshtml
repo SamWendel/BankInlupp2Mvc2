@@ -1,0 +1,10 @@
+﻿@model BankInlupp2Mvc2.ViewModels.CustomerDetailsViewModel
+@{
+    ViewData["Title"] = "CustomerDetails";
+}
+
+@foreach (var customer in Model.Customers)
+{
+    <h1>@customer.Surname, @customer.Givenname</h1>
+}
+

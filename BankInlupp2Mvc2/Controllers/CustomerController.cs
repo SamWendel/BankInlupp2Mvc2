@@ -45,8 +45,33 @@ namespace BankInlupp2Mvc2.Controllers
 
             }
 
+            if (sortField == "CustomerID")
+            {
+                if (sortOrder == "asc")
+                    query = query.OrderBy(y => y.CustomerId);
+                else
+                    query = query.OrderByDescending(y => y.CustomerId);
+            }
 
-            int pageSize = 20;
+            if (sortField == "City")
+            {
+                if (sortOrder == "asc")
+                    query = query.OrderBy(y => y.City);
+                else
+                    query = query.OrderByDescending(y => y.City);
+            }
+
+            if (sortField == "Birthday")
+            {
+                if (sortOrder == "asc")
+                    query = query.OrderBy(y => y.Birthday);
+                else
+                    query = query.OrderByDescending(y => y.Birthday);
+            }
+
+
+
+            int pageSize = 30;
             int howManyItemsToSkip = (page - 1) * pageSize;
             query = query.Skip(howManyItemsToSkip).Take(pageSize);
 
@@ -75,6 +100,57 @@ namespace BankInlupp2Mvc2.Controllers
             viewModel.SortField = sortField;
             viewModel.Page = page;
             viewModel.OppositeSortOrder = sortOrder == "asc" ? "desc" : "asc";
+
+            return View(viewModel);
+        }
+
+        public IActionResult CustomerSearch(string q)
+        {
+            var viewModel = new CustomerSearchViewModel();
+
+            viewModel.ResultList = _dbContext.Customers.Where(r => q == null || r.Givenname.Contains(q) || r.Surname.Contains(q) || r.City.Contains(q))
+                .Select(customer => new CustomerViewModel()
+                {
+                    CustomerId = customer.CustomerId,
+                    Gender = customer.Gender,
+                    Givenname = customer.Givenname,
+                    Surname = customer.Surname,
+                    Streetaddress = customer.Streetaddress,
+                    City = customer.City,
+                    Zipcode = customer.Zipcode,
+                    Country = customer.Country,
+                    CountryCode = customer.CountryCode,
+                    Birthday = customer.Birthday,
+                    NationalId = customer.NationalId,
+                    Telephonecountrycode = customer.Telephonecountrycode,
+                    Telephonenumber = customer.Telephonenumber,
+                    Emailaddress = customer.Emailaddress
+                }).ToList();
+            return View(viewModel);
+        }
+
+        public IActionResult CustomerDetails([FromRoute]int id)
+        {
+            var viewModel = new CustomerDetailsViewModel();
+            viewModel.Customers = _dbContext.Customers
+           .Where(r => r.CustomerId == id)
+           .Select(customer => new CustomerViewModel
+           {
+               CustomerId = customer.CustomerId,
+               Gender = customer.Gender,
+               Givenname = customer.Givenname,
+               Surname = customer.Surname,
+               Streetaddress = customer.Streetaddress,
+               City = customer.City,
+               Zipcode = customer.Zipcode,
+               Country = customer.Country,
+               CountryCode = customer.CountryCode,
+               Birthday = customer.Birthday,
+               NationalId = customer.NationalId,
+               Telephonecountrycode = customer.Telephonecountrycode,
+               Telephonenumber = customer.Telephonenumber,
+               Emailaddress = customer.Emailaddress
+           }).ToList();
 
             return View(viewModel);
         }
