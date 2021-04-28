@@ -108,7 +108,8 @@ namespace BankInlupp2Mvc2.Controllers
         {
             var viewModel = new CustomerSearchViewModel();
 
-            viewModel.ResultList = _dbContext.Customers.Where(r => q == null || r.Givenname.Contains(q) || r.Surname.Contains(q) || r.City.Contains(q))
+            viewModel.ResultList = _dbContext.Customers
+                .Where(r => q == null || r.Givenname.Contains(q) || r.Surname.Contains(q) || r.City.Contains(q))
                 .Select(customer => new CustomerViewModel()
                 {
                     CustomerId = customer.CustomerId,
