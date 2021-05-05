@@ -62,7 +62,7 @@ namespace BankInlupp2Mvc2
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Account}/{action=AccountIndex}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

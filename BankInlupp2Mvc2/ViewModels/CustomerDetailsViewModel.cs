@@ -23,5 +23,11 @@ namespace BankInlupp2Mvc2.ViewModels
         public string Telephonecountrycode { get; set; }
         public string Telephonenumber { get; set; }
         public string Emailaddress { get; set; }
+        public int AccountId { get; set; }
+        public string Frequency { get; set; }
+        public DateTime Created { get; set; }
+        public decimal Balance { get; set; }
+        public int DispositionId { get; set; }
+        public string Type { get; set; }
     }
 }

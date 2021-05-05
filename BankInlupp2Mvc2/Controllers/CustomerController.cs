@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BankInlupp2Mvc2.Data;
 using BankInlupp2Mvc2.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankInlupp2Mvc2.Controllers
 {
@@ -150,7 +151,8 @@ namespace BankInlupp2Mvc2.Controllers
                NationalId = customer.NationalId,
                Telephonecountrycode = customer.Telephonecountrycode,
                Telephonenumber = customer.Telephonenumber,
-               Emailaddress = customer.Emailaddress
+               Emailaddress = customer.Emailaddress,
+
            }).ToList();
 
             return View(viewModel);

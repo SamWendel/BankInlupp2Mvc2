@@ -17,8 +17,6 @@
         <th><a asp-action="CustomerList" asp-route-sortField="Birthday" asp-route-sortOrder="@(Model.SortField == "Birthday" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Birthdate</a></th>
     </tr>
 
-    Knummer, pnummer, namn, adress, city
-
     @foreach (var item in Model.ResultList)
     {
         <tr>
