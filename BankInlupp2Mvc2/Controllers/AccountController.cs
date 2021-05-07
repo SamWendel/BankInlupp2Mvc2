@@ -24,7 +24,6 @@ namespace BankInlupp2Mvc2.Controllers
             viewModel.TotalCustomers = _dbContext.Customers.Count();
             viewModel.TotalBalance = _dbContext.Accounts.Sum(r => r.Balance);
 
-
             return View(viewModel);
         }
     }
