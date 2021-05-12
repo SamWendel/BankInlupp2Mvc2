@@ -7,7 +7,6 @@ namespace BankInlupp2Mvc2.ViewModels
 {
     public class CustomerDetailsViewModel
     {
-        //KANSKE ONÖDIG, KÖR CUSTOMERVIEWMODEL?
         public List<CustomerViewModel> Customers { get; set; }
         public int CustomerId { get; set; }
         public string Gender { get; set; }

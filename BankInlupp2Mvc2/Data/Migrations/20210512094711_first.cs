@@ -2,7 +2,7 @@
 
 namespace BankInlupp2Mvc2.Data.Migrations
 {
-    public partial class First : Migration
+    public partial class first : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

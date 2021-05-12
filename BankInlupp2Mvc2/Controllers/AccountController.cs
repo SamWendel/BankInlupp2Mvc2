@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BankInlupp2Mvc2.Data;
 using BankInlupp2Mvc2.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankInlupp2Mvc2.Controllers
@@ -16,6 +17,7 @@ namespace BankInlupp2Mvc2.Controllers
             _dbContext = dbContext;
         }
 
+        [Authorize(Roles = "Admin, Cashier")]
         public IActionResult AccountIndex()
         {
             var viewModel = new AccountIndexViewModel();

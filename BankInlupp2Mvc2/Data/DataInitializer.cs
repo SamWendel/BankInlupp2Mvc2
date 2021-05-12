@@ -35,9 +35,11 @@ namespace BankInlupp2Mvc2.Data
         private static void SeedUsers(UserManager<IdentityUser> userManager)
         {
             AddUserIfNotExists(userManager, "stefan.holmberg@systementor.se", "Hejsan123#", new string[] { "Admin" });
-            AddUserIfNotExists(userManager, "stefan.holmbergCashier@systementor.se", "Hejsan123#", new string[] { "Cashier" });
+            AddUserIfNotExists(userManager, "stefan.holmberg@nackademin.se", "Hejsan123#", new string[] { "Cashier" });
         }
-        private static void AddUserIfNotExists(UserManager<IdentityUser> userManager, string userName, string password, string[] roles)
+
+        private static void AddUserIfNotExists(UserManager<IdentityUser> userManager,
+        string userName, string password, string[] roles)
         {
             if (userManager.FindByEmailAsync(userName).Result != null) return;
 

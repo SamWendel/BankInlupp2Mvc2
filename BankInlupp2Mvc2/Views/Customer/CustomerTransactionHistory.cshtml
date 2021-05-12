@@ -1,0 +1,26 @@
+﻿@model BankInlupp2Mvc2.ViewModels.CustomerTransactionHistoryListViewModel
+@{
+    ViewData["Title"] = "CustomerTransactionHistory";
+}
+
+<table>
+    <tr>
+        <th><a asp-action="CustomerTransactionHistory" asp-route-sortField="AccountId" asp-route-sortOrder="@(Model.SortField == "AccountId" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">AccountID</a></th>
+        <th><a asp-action="CustomerTransactionHistory" asp-route-sortField="Amount" asp-route-sortOrder="@(Model.SortField == "Amount" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Amount</a></th>
+        <th><a asp-action="CustomerTransactionHistory" asp-route-sortField="Date" asp-route-sortOrder="@(Model.SortField == "Date" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Date</a></th>
+        <th><a asp-action="CustomerTransactionHistory" asp-route-sortField="TransactionId" asp-route-sortOrder="@(Model.SortField == "TransactionId" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">TransactionID</a></th>
+        <th><a asp-action="CustomerTransactionHistory" asp-route-sortField="Balance" asp-route-sortOrder="@(Model.SortField == "Balance" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Balance</a></th>
+    </tr>
+
+    @foreach (var transaction in Model.TransactionList)
+    {
+        <tr>
+            <td class="td">@transaction.AccountId</td>
+            <td class="td">@transaction.Amount kr</td>
+            <td class="td">@transaction.Date</td>
+            <td class="td">@transaction.TransactionId</td>
+            <td class="td">@transaction.Balance kr</td>
+        </tr>
+    }
+</table>
+

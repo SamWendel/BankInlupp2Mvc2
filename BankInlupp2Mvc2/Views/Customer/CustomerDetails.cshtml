@@ -5,24 +5,27 @@
 
 @foreach (var customer in Model.Customers)
 {
-    <h2>@customer.Givenname @customer.Surname</h2>
-    <br />
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            Earnings (Monthly)
-                        </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">@customer.Balance</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                    </div>
-                </div>
+    <div class="container-fluid">
+        <h2>@customer.Givenname @customer.Surname</h2>
+        <img src="~/img/blank-profile-picture-973460_1280-1.png" alt="blank profile" width="180" height="200">
+        <br />
+        <br />
+        <div>
+            <div>Customer ID: @customer.CustomerId</div>
+            <div>Customer since: @customer.Created</div>
+            <div>Birthdate: @customer.Birthday</div>
+            <div>Street address: @customer.Streetaddress</div>
+            <div>City: @customer.City</div>
+            <div>Country: @customer.Country</div>
+            <div>Country code: @customer.CountryCode</div>
+            <div>E-mail: @customer.Emailaddress</div>
+            <div>Phone: @customer.Telephonenumber</div>
+            <div>Current balance: @customer.Balance kr</div>
+            <div>
+                <a asp-controller="Customer"
+                   asp-action="CustomerTransactionHistory"
+                   asp-route-id="@customer.AccountId">Transaction history</a>
             </div>
         </div>
     </div>
 }
-

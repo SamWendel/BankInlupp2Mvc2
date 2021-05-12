@@ -23,6 +23,7 @@
             <td class="td">
                 <a asp-controller="Customer"
                    asp-action="CustomerDetails"
+                   asp-route-Givenname="@item.Givenname"
                    asp-route-id="@item.CustomerId">@item.Givenname</a>
             </td>
             <td class="td">@item.Surname</td>
