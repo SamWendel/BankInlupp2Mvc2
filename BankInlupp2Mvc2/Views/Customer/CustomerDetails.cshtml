@@ -11,9 +11,16 @@
         <br />
         <br />
         <div>
+            <table>
+                <tr>
+                    <th><a asp-controller="Account" asp-action="Deposit" asp-route-id="@customer.AccountId">Deposit</a></th>
+                    <th><a asp-controller="Account" asp-action="Transaction" asp-route-id="@customer.AccountId">Transfer</a></th>
+                    <th><a asp-controller="Account" asp-action="Withdraw" asp-route-id="@customer.AccountId">Withdraw</a></th>
+                </tr>
+            </table>
             <div>Customer ID: @customer.CustomerId</div>
-            <div>Customer since: @customer.Created</div>
-            <div>Birthdate: @customer.Birthday</div>
+            <div>Customer since: @customer.Created.ToString("yyyy-MM-dd")</div>
+            <div>Birthdate: @customer.Birthday.ToString("yyyy-MM-dd")</div>
             <div>Street address: @customer.Streetaddress</div>
             <div>City: @customer.City</div>
             <div>Country: @customer.Country</div>

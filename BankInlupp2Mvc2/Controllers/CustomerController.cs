@@ -39,14 +39,6 @@ namespace BankInlupp2Mvc2.Controllers
                     query = query.OrderByDescending(y => y.Givenname);
             }
 
-            if (sortField == "Surname")
-            {
-                if (sortOrder == "asc")
-                    query = query.OrderBy(y => y.Surname);
-                else
-                    query = query.OrderByDescending(y => y.Surname);
-
-            }
 
             if (sortField == "CustomerID")
             {
@@ -56,12 +48,29 @@ namespace BankInlupp2Mvc2.Controllers
                     query = query.OrderByDescending(y => y.CustomerId);
             }
 
+            //if (sortField == "AccountID")
+            //{
+            //    if (sortOrder == "asc")
+            //        query = query.OrderBy(y => y.AccountId);
+            //    else
+            //        query = query.OrderByDescending(y => y.AccountId);
+            //}
+
             if (sortField == "City")
             {
                 if (sortOrder == "asc")
                     query = query.OrderBy(y => y.City);
                 else
                     query = query.OrderByDescending(y => y.City);
+            }
+
+            if (sortField == "Streetaddress")
+            {
+                if (sortOrder == "asc")
+                    query = query.OrderBy(y => y.Streetaddress);
+                else
+                    query = query.OrderByDescending(y => y.Streetaddress);
+
             }
 
             if (sortField == "Birthday")
@@ -77,7 +86,6 @@ namespace BankInlupp2Mvc2.Controllers
             int pageSize = 30;
             int howManyItemsToSkip = (page - 1) * pageSize;
             query = query.Skip(howManyItemsToSkip).Take(pageSize);
-
 
             viewModel.Customers = query
                 .Select(customer => new CustomerViewModel
@@ -188,16 +196,16 @@ namespace BankInlupp2Mvc2.Controllers
                .Where(r => q == null);
 
             if (string.IsNullOrEmpty(sortField))
-                sortField = "Date";
+                sortField = "TransactionId";
             if (string.IsNullOrEmpty(sortOrder))
-                sortOrder = "asc";
+                sortOrder = "desc";
 
-            if (sortField == "AccountId")
-            {
+            if (sortField == "TransactionId")
+            { 
                 if (sortOrder == "asc")
-                    query = query.OrderBy(y => y.AccountId);
+                    query = query.OrderBy(y => y.TransactionId);
                 else
-                    query = query.OrderByDescending(y => y.AccountId);
+                    query = query.OrderByDescending(y => y.TransactionId);
             }
 
             if (sortField == "Amount")
@@ -217,13 +225,6 @@ namespace BankInlupp2Mvc2.Controllers
                     query = query.OrderByDescending(y => y.Date);
             }
 
-            if (sortField == "TransactionId")
-            {
-                if (sortOrder == "asc")
-                    query = query.OrderBy(y => y.TransactionId);
-                else
-                    query = query.OrderByDescending(y => y.TransactionId);
-            }
 
             if (sortField == "Balance")
             {
@@ -231,6 +232,14 @@ namespace BankInlupp2Mvc2.Controllers
                     query = query.OrderBy(y => y.Balance);
                 else
                     query = query.OrderByDescending(y => y.Balance);
+            }
+
+            if (sortField == "Operation")
+            {
+                if (sortOrder == "asc")
+                    query = query.OrderBy(y => y.Operation);
+                else
+                    query = query.OrderByDescending(y => y.Operation);
             }
 
 
@@ -246,7 +255,7 @@ namespace BankInlupp2Mvc2.Controllers
                     Amount = transactions.Amount,
                     Balance = transactions.Balance,
                     Symbol = transactions.Symbol,
-                    Bank = transactions.Bank,
+                    Bank = transactions.Bank, 
                     Account = transactions.Account
                 }).ToList();
 

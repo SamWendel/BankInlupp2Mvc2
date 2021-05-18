@@ -1,0 +1,16 @@
+﻿@model BankInlupp2Mvc2.ViewModels.WithdrawViewModel
+@{
+    ViewData["Title"] = "Withdraw";
+}
+
+<h2>Current balance: @Model.Balance kr</h2>
+<br />
+<br />
+<div>
+    <form asp-controller="Account" asp-action="Withdraw" method="post">
+        <input class="form-control" asp-for="Amount">
+        <button type="submit" class="btn btn-primary">Withdraw</button>
+    </form>
+</div>
+@Html.ValidationMessageFor(m => m.Error)
+

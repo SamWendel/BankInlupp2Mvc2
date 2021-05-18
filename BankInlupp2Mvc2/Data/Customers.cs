@@ -19,7 +19,7 @@ namespace BankInlupp2Mvc2.Data
         public string Zipcode { get; set; }
         public string Country { get; set; }
         public string CountryCode { get; set; }
-        public DateTime? Birthday { get; set; }
+        public DateTime Birthday { get; set; }
         public string NationalId { get; set; }
         public string Telephonecountrycode { get; set; }
         public string Telephonenumber { get; set; }

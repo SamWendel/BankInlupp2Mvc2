@@ -59,6 +59,7 @@ namespace BankInlupp2Mvc2
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseResponseCaching();
 
             app.UseEndpoints(endpoints =>
             {

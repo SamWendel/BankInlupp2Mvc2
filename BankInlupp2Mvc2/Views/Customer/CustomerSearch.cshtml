@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "CustomerSearch";
 }
-<div>
+<div style="margin-right:100px">
     <form asp-controller="Customer" asp-action="CustomerSearch" method="get">
         <input type="text" name="q" class="form-control" placeholder="Search..">
     </form>
@@ -11,9 +11,9 @@
 <table>
     <tr>
         <th><a asp-action="CustomerList" asp-route-sortField="Givenname" asp-route-sortOrder="@(Model.SortField == "Givenname" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Name</a></th>
-        <th><a asp-action="CustomerList" asp-route-sortField="Surname" asp-route-sortOrder="@(Model.SortField == "Surname" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Surname</a></th>
         <th><a asp-action="CustomerList" asp-route-sortField="CustomerID" asp-route-sortOrder="@(Model.SortField == "CustomerID" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Customer ID</a></th>
         <th><a asp-action="CustomerList" asp-route-sortField="City" asp-route-sortOrder="@(Model.SortField == "City" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">City</a></th>
+        <th><a asp-action="CustomerList" asp-route-sortField="Address" asp-route-sortOrder="@(Model.SortField == "Address" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Address</a></th>
         <th><a asp-action="CustomerList" asp-route-sortField="Birthday" asp-route-sortOrder="@(Model.SortField == "Birthday" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Birthdate</a></th>
     </tr>
 
@@ -24,12 +24,12 @@
                 <a asp-controller="Customer"
                    asp-action="CustomerDetails"
                    asp-route-Givenname="@item.Givenname"
-                   asp-route-id="@item.CustomerId">@item.Givenname</a>
+                   asp-route-id="@item.CustomerId">@item.Givenname @item.Surname</a>
             </td>
-            <td class="td">@item.Surname</td>
             <td class="td">@item.CustomerId</td>
             <td class="td">@item.City</td>
-            <td class="td">@item.Birthday</td>
+            <td class="td">@item.Streetaddress</td>
+            <td class="td">@item.Birthday.ToString("yyyy-MM-dd")</td>
         </tr>
     }
     <tfoot>

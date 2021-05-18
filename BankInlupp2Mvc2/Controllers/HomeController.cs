@@ -43,7 +43,7 @@ namespace BankInlupp2Mvc2.Controllers
         public IActionResult Logout()
         {
             _signInManager.SignOutAsync().Wait();
-            return RedirectToAction("Account/AccountIndex");
+            return View();
         }
     }
 }
