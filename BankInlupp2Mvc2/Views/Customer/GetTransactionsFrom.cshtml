@@ -1,0 +1,21 @@
+﻿@model BankInlupp2Mvc2.ViewModels.GetTransactionFromViewModel
+@{ Layout = null;}
+
+@foreach (var transaction in Model.TransactionList)
+{
+    <tr>
+        <td class="td">@transaction.TransactionId</td>
+        @if (@transaction.Amount.ToString().Contains("-"))
+        {
+            <td style="color:red" class="td">@transaction.Amount kr</td>
+        }
+        else
+        {
+            <td class="td">@transaction.Amount kr</td>
+        }
+        <td class="td">@transaction.Date.ToString("yyyy-MM-dd")</td>
+        <td class="td">@transaction.Balance kr</td>
+        <td class="td">@transaction.Operation</td>
+    </tr>
+}
+

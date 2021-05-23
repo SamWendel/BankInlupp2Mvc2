@@ -3,31 +3,48 @@
     ViewData["Title"] = "CustomerTransactionHistory";
 }
 
-<table>
-    <tr>
-        <th><a asp-action="CustomerTransactionHistory" asp-route-sortField="TransactionId" asp-route-sortOrder="@(Model.SortField == "TransactionId" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">TransactionID</a></th>
-        <th><a asp-action="CustomerTransactionHistory" asp-route-sortField="Amount" asp-route-sortOrder="@(Model.SortField == "Amount" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Amount</a></th>
-        <th><a asp-action="CustomerTransactionHistory" asp-route-sortField="Date" asp-route-sortOrder="@(Model.SortField == "Date" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Date</a></th>
-        <th><a asp-action="CustomerTransactionHistory" asp-route-sortField="Balance" asp-route-sortOrder="@(Model.SortField == "Balance" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Balance</a></th>
-        <th><a asp-action="CustomerTransactionHistory" asp-route-sortField="Operation" asp-route-sortOrder="@(Model.SortField == "Operation" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Type</a></th>
-    </tr>
-
-    @foreach (var transaction in Model.TransactionList)
-    {
+    <table id="twentymore">
         <tr>
-            <td class="td">@transaction.TransactionId</td>
-            @if (@transaction.Amount.ToString().Contains("-"))
-            {
-                <td style="color:red" class="td">@transaction.Amount kr</td>
-            }
-            else
-            {
-                <td class="td">@transaction.Amount kr</td>
-            }
-            <td class="td">@transaction.Date.ToString("yyyy-MM-dd")</td>
-            <td class="td">@transaction.Balance kr</td>
-            <td class="td">@transaction.Operation</td>
+            <th>Transaction ID</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Balance</th>
+            <th>Type</th>
         </tr>
-    }
-</table>
+
+        @foreach (var transaction in Model.TransactionList.Take(20))
+        {
+            <tr>
+                <td class="td">@transaction.TransactionId</td>
+                @if (@transaction.Amount.ToString().Contains("-"))
+                {
+                    <td style="color:red" class="td">@transaction.Amount kr</td>
+                }
+                else
+                {
+                    <td class="td">@transaction.Amount kr</td>
+                }
+                <td class="td">@transaction.Date.ToString("yyyy-MM-dd")</td>
+                <td class="td">@transaction.Balance kr</td>
+                <td class="td">@transaction.Operation</td>
+            </tr>
+        }
+        <a class="btn btn-secondary" href="#" onclick="fetch20more(); return false;">More</a>
+    </table>
+
+@section Scripts
+{
+    <script>
+        var skip = 0;
+        function fetch20more() {
+            skip = skip + 20;
+            $.ajax({
+                url: "/Customer/GetTransactionsFrom?id="+@Model.AccountId+"&skip=" + skip, success: function (result) {
+                    $("#twentymore").append(result);
+                }
+            });
+        }
+    </script>
+
+}
 

@@ -22,6 +22,7 @@ namespace BankInlupp2Mvc2.Controllers
         public IActionResult CustomerList(string q, string sortField, string sortOrder, int page = 1)
         {
             var viewModel = new CustomerListViewModel();
+            var dispositions = _dbContext.Dispositions;
 
             var query = _dbContext.Customers
                 .Where(r => q == null || r.Givenname.Contains(q) || r.Surname.Contains(q));
@@ -81,8 +82,6 @@ namespace BankInlupp2Mvc2.Controllers
                     query = query.OrderByDescending(y => y.Birthday);
             }
 
-
-
             int pageSize = 30;
             int howManyItemsToSkip = (page - 1) * pageSize;
             query = query.Skip(howManyItemsToSkip).Take(pageSize);
@@ -103,7 +102,8 @@ namespace BankInlupp2Mvc2.Controllers
                     NationalId = customer.NationalId,
                     Telephonecountrycode = customer.Telephonecountrycode,
                     Telephonenumber = customer.Telephonenumber,
-                    Emailaddress = customer.Emailaddress
+                    Emailaddress = customer.Emailaddress,
+                    AccountId = dispositions.FirstOrDefault(r => r.CustomerId == customer.CustomerId).AccountId
                 }).ToList();
 
             viewModel.q = q;
@@ -155,7 +155,7 @@ namespace BankInlupp2Mvc2.Controllers
             if (disposition != null)
             {
                 var account = _dbContext.Accounts.FirstOrDefault(r => r.AccountId == disposition.AccountId);
-                if (account != null) 
+                if (account != null)
                 {
                     accountBalance = account.Balance;
                     accountId = account.AccountId;
@@ -189,63 +189,18 @@ namespace BankInlupp2Mvc2.Controllers
         }
 
         [Authorize(Roles = "Admin, Cashier")]
-        public IActionResult CustomerTransactionHistory([FromRoute]int id, string q, string sortField, string sortOrder)
+        public IActionResult CustomerTransactionHistory([FromRoute]int id, string q)
         {
             var viewModel = new CustomerTransactionHistoryListViewModel();
             var query = _dbContext.Transactions
                .Where(r => q == null);
 
-            if (string.IsNullOrEmpty(sortField))
-                sortField = "TransactionId";
-            if (string.IsNullOrEmpty(sortOrder))
-                sortOrder = "desc";
-
-            if (sortField == "TransactionId")
-            { 
-                if (sortOrder == "asc")
-                    query = query.OrderBy(y => y.TransactionId);
-                else
-                    query = query.OrderByDescending(y => y.TransactionId);
-            }
-
-            if (sortField == "Amount")
-            {
-                if (sortOrder == "asc")
-                    query = query.OrderBy(y => y.Amount);
-                else
-                    query = query.OrderByDescending(y => y.Amount);
-
-            }
-
-            if (sortField == "Date")
-            {
-                if (sortOrder == "asc")
-                    query = query.OrderBy(y => y.Date);
-                else
-                    query = query.OrderByDescending(y => y.Date);
-            }
-
-
-            if (sortField == "Balance")
-            {
-                if (sortOrder == "asc")
-                    query = query.OrderBy(y => y.Balance);
-                else
-                    query = query.OrderByDescending(y => y.Balance);
-            }
-
-            if (sortField == "Operation")
-            {
-                if (sortOrder == "asc")
-                    query = query.OrderBy(y => y.Operation);
-                else
-                    query = query.OrderByDescending(y => y.Operation);
-            }
-
+            var account = _dbContext.Accounts.FirstOrDefault(r => r.AccountId == id);
+            viewModel.AccountId = account.AccountId;
 
             viewModel.TransactionList = query
                 .Where(r => r.AccountId == id)
-                .Select(transactions => new CustomerTransactionHistoryViewModel
+                .OrderByDescending(x => x.Date).OrderByDescending(y => y.TransactionId).Select(transactions => new CustomerTransactionHistoryViewModel
                 {
                     AccountId = id,
                     TransactionId = transactions.TransactionId,
@@ -255,14 +210,33 @@ namespace BankInlupp2Mvc2.Controllers
                     Amount = transactions.Amount,
                     Balance = transactions.Balance,
                     Symbol = transactions.Symbol,
-                    Bank = transactions.Bank, 
+                    Bank = transactions.Bank,
                     Account = transactions.Account
                 }).ToList();
 
-            viewModel.q = q;
-            viewModel.SortOrder = sortOrder;
-            viewModel.SortField = sortField;
-            viewModel.OppositeSortOrder = sortOrder == "asc" ? "desc" : "asc";
+            return View(viewModel);
+        }
+
+        [Authorize(Roles = "Admin, Cashier")]
+        public IActionResult GetTransactionsFrom(int skip, int id)
+        {
+
+            var viewModel = new GetTransactionFromViewModel();
+            var account = _dbContext.Accounts.First(r => r.AccountId == id);
+            viewModel.AccountId = account.AccountId;
+
+            viewModel.TransactionList = _dbContext.Transactions.Where(r => r.AccountId == account.AccountId)
+                .OrderByDescending(y => y.Date).Skip(skip).Take(20).Select(transactions => new GetTransactionFromViewModel()
+                {
+                    AccountId = transactions.AccountId,
+                    Amount = transactions.Amount,
+                    Balance = transactions.Balance,
+                    Date = transactions.Date,
+                    TransactionId = transactions.TransactionId,
+                    Type = transactions.Type,
+                    Operation = transactions.Operation
+
+                }).ToList();
 
             return View(viewModel);
         }

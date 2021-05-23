@@ -6,6 +6,7 @@ using BankInlupp2Mvc2.Data;
 using BankInlupp2Mvc2.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BankInlupp2Mvc2.Controllers
 {
@@ -70,59 +71,6 @@ namespace BankInlupp2Mvc2.Controllers
         }
 
         [Authorize(Roles = "Admin, Cashier")]
-        public IActionResult Transaction([FromRoute] int id)
-        {
-            var viewModel = new TransactionViewModel();
-            var accounts = _dbContext.Accounts.FirstOrDefault(r => r.AccountId == id);
-            viewModel.Balance = accounts.Balance;
-
-            return View(viewModel);
-        }
-
-        [Authorize(Roles = "Admin, Cashier")]
-        [HttpPost]
-        public IActionResult Transaction([FromRoute] TransactionViewModel viewModel, int id, int recieverId, decimal amount)
-        {
-            var balanceCheck = _dbContext.Accounts.FirstOrDefault(r => r.AccountId == id);
-
-            if (ModelState.IsValid && amount > 0 && amount < balanceCheck.Balance)
-            {
-                var dbTransactionSender = new Transactions();
-                var dbTransactionReciever = new Transactions();
-                _dbContext.Transactions.Add(dbTransactionSender);
-                _dbContext.Transactions.Add(dbTransactionReciever);
-
-                var senderAccount = _dbContext.Accounts.FirstOrDefault(r => r.AccountId == id);
-                var currentSenderBalance = senderAccount.Balance;
-                var recieverAccount = _dbContext.Accounts.FirstOrDefault(r => r.AccountId == recieverId);
-                var currentRecieverBalance = recieverAccount.Balance;
-
-                dbTransactionSender.AccountId = id;
-                dbTransactionSender.Amount = amount - (amount * 2);
-                dbTransactionSender.Date = DateTime.Now;
-                dbTransactionSender.Balance = currentSenderBalance - amount;
-                dbTransactionSender.Operation = "Transfer to another account";
-                dbTransactionSender.Type = "Credit";
-                senderAccount.Balance = currentSenderBalance - amount;
-
-                dbTransactionReciever.AccountId = recieverId;
-                dbTransactionReciever.Amount = amount;
-                dbTransactionReciever.Date = DateTime.Now;
-                dbTransactionReciever.Balance = currentRecieverBalance + amount;
-                dbTransactionReciever.Operation = "Transfer";
-                dbTransactionReciever.Type = "Debit";
-                recieverAccount.Balance = currentRecieverBalance + amount;
-
-                _dbContext.SaveChanges();
-                return RedirectToAction("AccountIndex", "Account");
-            }
-            var accounts = _dbContext.Accounts.FirstOrDefault(r => r.AccountId == id);
-            viewModel.Balance = accounts.Balance;
-            ModelState.AddModelError("Error", "Invalid amount");
-            return View(viewModel);
-        }
-
-        [Authorize(Roles = "Admin, Cashier")]
         public IActionResult Withdraw([FromRoute] int id)
         {
             var viewModel = new WithdrawViewModel();
@@ -162,5 +110,71 @@ namespace BankInlupp2Mvc2.Controllers
             ModelState.AddModelError("Error", "Invalid amount");
             return View(viewModel);
         }
+
+        [Authorize(Roles = "Admin, Cashier")]
+        public IActionResult Transaction([FromRoute] int id)
+        {
+            var viewModel = new TransactionViewModel();
+            var accounts = _dbContext.Accounts.FirstOrDefault(r => r.AccountId == id);
+            viewModel.Balance = accounts.Balance;
+
+            return View(viewModel);
+        }
+
+        [Authorize(Roles = "Admin, Cashier")]
+        [HttpPost]
+        public IActionResult Transaction([FromRoute] TransactionViewModel viewModel, int id, int recieverId, decimal amount)
+        {
+            var balanceCheck = _dbContext.Accounts.FirstOrDefault(r => r.AccountId == id);
+            bool status = CheckAccountIdExistance(recieverId);
+
+            if (ModelState.IsValid && amount > 0 && amount < balanceCheck.Balance && status && recieverId != id)
+            {
+                var dbTransactionSender = new Transactions();
+                var dbTransactionReciever = new Transactions();
+                _dbContext.Transactions.Add(dbTransactionSender);
+                _dbContext.Transactions.Add(dbTransactionReciever);
+
+                var senderAccount = _dbContext.Accounts.FirstOrDefault(r => r.AccountId == id);
+                var currentSenderBalance = senderAccount.Balance;
+                var recieverAccount = _dbContext.Accounts.FirstOrDefault(r => r.AccountId == recieverId);
+                var currentRecieverBalance = recieverAccount.Balance;
+
+                dbTransactionSender.AccountId = id;
+                dbTransactionSender.Amount = amount - (amount * 2);
+                dbTransactionSender.Date = DateTime.Now;
+                dbTransactionSender.Balance = currentSenderBalance - amount;
+                dbTransactionSender.Operation = "Transfer to another account";
+                dbTransactionSender.Type = "Credit";
+                senderAccount.Balance = currentSenderBalance - amount;
+
+                dbTransactionReciever.AccountId = recieverId;
+                dbTransactionReciever.Amount = amount;
+                dbTransactionReciever.Date = DateTime.Now;
+                dbTransactionReciever.Balance = currentRecieverBalance + amount;
+                dbTransactionReciever.Operation = "Transfer from another account";
+                dbTransactionReciever.Type = "Debit";
+                recieverAccount.Balance = currentRecieverBalance + amount;
+
+                _dbContext.SaveChanges();
+                return RedirectToAction("AccountIndex", "Account");
+            }
+            var accounts = _dbContext.Accounts.FirstOrDefault(r => r.AccountId == id);
+            viewModel.Balance = accounts.Balance;
+            ModelState.AddModelError("Error", "Invalid amount or AccountID");
+            return View(viewModel);
+        }
+
+        private bool CheckAccountIdExistance(int recieverId)
+        {
+            bool status = true;
+            if(!_dbContext.Accounts.Any(r => r.AccountId == recieverId))
+            {
+                status = false;
+            }
+
+            return status;
+        }
     }
+
 }

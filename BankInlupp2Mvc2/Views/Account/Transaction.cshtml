@@ -6,10 +6,12 @@
 <h2>Current balance: @Model.Balance kr</h2>
 <br />
 <br />
-<div>
+<div style="margin-right:100px">
     <form asp-controller="Account" asp-action="Transaction" method="post">
-        <input class="form-control" asp-for="RecieverId" />
-        <input class="form-control" asp-for="Amount">
+        <h3>Account ID</h3>
+        <input class="form-control" asp-for="RecieverId"/>
+        <h3>Amount</h3>
+        <input class="form-control" asp-for="Amount"/>
         <button type="submit" class="btn btn-primary">Transfer</button>
     </form>
 </div>

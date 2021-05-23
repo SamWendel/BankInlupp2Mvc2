@@ -6,8 +6,9 @@
 <h2>Current balance: @Model.Balance kr</h2>
 <br />
 <br />
-<div>
+<div style="margin-right:100px">
     <form asp-controller="Account" asp-action="Withdraw" method="post">
+        <h3>Amount</h3>
         <input class="form-control" asp-for="Amount">
         <button type="submit" class="btn btn-primary">Withdraw</button>
     </form>
