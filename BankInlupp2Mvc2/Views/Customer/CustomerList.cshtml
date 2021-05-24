@@ -20,7 +20,7 @@
 
     @foreach (var item in Model.Customers)
     {
-        <tr>
+        <tr style="color:black">
             <td class="td">
                 <a asp-controller="Customer"
                    asp-action="CustomerDetails"
@@ -35,8 +35,8 @@
         </tr>
     }
     <tfoot>
-        <tr>
-            <td colspan="5">
+        <tr class="ignore-css">
+            <td class="ignore-css" colspan="5">
                 <nav aria-label="...">
                     <ul class="pagination">
                         <li class="page-item">
@@ -49,7 +49,14 @@
                                asp-route-page="@(Model.Page - 1)"
                                asp-route-q="@Model.q">Previous</a>
                         </li>
-
+                        <li class="page-item">
+                            <a class="page-link"
+                               asp-controller="Customer"
+                               asp-action="CustomerList"
+                               asp-route-sortField="@Model.SortField"
+                               asp-route-sortOrder="@Model.SortOrder"
+                               asp-route-page="@(Model.Page)">@Model.Page</a>
+                        </li>
                         <li class="page-item">
                             <a class="page-link"
                                asp-controller="Customer"

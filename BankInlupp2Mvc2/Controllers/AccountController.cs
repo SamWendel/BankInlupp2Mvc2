@@ -18,7 +18,7 @@ namespace BankInlupp2Mvc2.Controllers
             _dbContext = dbContext;
         }
 
-        [Authorize(Roles = "Admin, Cashier")]
+        [Authorize(Roles = "Cashier")]
         [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Any)]
         public IActionResult AccountIndex()
         {
@@ -31,7 +31,7 @@ namespace BankInlupp2Mvc2.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles = "Admin, Cashier")]
+        [Authorize(Roles = "Cashier")]
         public IActionResult Deposit([FromRoute] int id)
         {
             var viewModel = new DepositViewModel();
@@ -41,11 +41,11 @@ namespace BankInlupp2Mvc2.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles = "Admin, Cashier")]
+        [Authorize(Roles = "Cashier")]
         [HttpPost]
         public IActionResult Deposit(DepositViewModel viewModel, int id, decimal amount)
         {
-            if (ModelState.IsValid && amount > 0)
+            if (ModelState.IsValid && amount > 0 && amount < 100001)
             {
                 var dbTransaction = new Transactions();
                 _dbContext.Transactions.Add(dbTransaction);
@@ -70,7 +70,7 @@ namespace BankInlupp2Mvc2.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles = "Admin, Cashier")]
+        [Authorize(Roles = "Cashier")]
         public IActionResult Withdraw([FromRoute] int id)
         {
             var viewModel = new WithdrawViewModel();
@@ -80,7 +80,7 @@ namespace BankInlupp2Mvc2.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles = "Admin, Cashier")]
+        [Authorize(Roles = "Cashier")]
         [HttpPost]
         public IActionResult Withdraw(WithdrawViewModel viewModel, int id, decimal amount)
         {
@@ -111,7 +111,7 @@ namespace BankInlupp2Mvc2.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles = "Admin, Cashier")]
+        [Authorize(Roles = "Cashier")]
         public IActionResult Transaction([FromRoute] int id)
         {
             var viewModel = new TransactionViewModel();
@@ -121,7 +121,7 @@ namespace BankInlupp2Mvc2.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles = "Admin, Cashier")]
+        [Authorize(Roles = "Cashier")]
         [HttpPost]
         public IActionResult Transaction([FromRoute] TransactionViewModel viewModel, int id, int recieverId, decimal amount)
         {

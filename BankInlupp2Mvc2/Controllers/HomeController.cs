@@ -23,7 +23,11 @@ namespace BankInlupp2Mvc2.Controllers
             _logger = logger;
             _signInManager = signInManager;
         }
-         
+
+
+
+
+        [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Any)]
         public IActionResult Index()
         {
             return View();

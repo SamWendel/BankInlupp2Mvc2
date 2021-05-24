@@ -18,7 +18,7 @@ namespace BankInlupp2Mvc2.Controllers
             _dbContext = dbContext;
         }
 
-        [Authorize(Roles = "Admin, Cashier")]
+        [Authorize(Roles = "Cashier")]
         public IActionResult CustomerList(string q, string sortField, string sortOrder, int page = 1)
         {
             var viewModel = new CustomerListViewModel();
@@ -115,12 +115,75 @@ namespace BankInlupp2Mvc2.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles = "Admin, Cashier")]
-        public IActionResult CustomerSearch(string q)
+        [Authorize(Roles = "Cashier")]
+        public IActionResult CustomerSearch(string q, string sortField, string sortOrder, int page = 1)
         {
             var viewModel = new CustomerSearchViewModel();
+            var dispositions = _dbContext.Dispositions;
 
-            viewModel.ResultList = _dbContext.Customers
+            var query = _dbContext.Customers
+                .Where(r => q == null || r.Givenname.Contains(q) || r.Surname.Contains(q) || r.CustomerId.ToString().Equals(q));
+
+            if (string.IsNullOrEmpty(sortField))
+                sortField = "Givenname";
+            if (string.IsNullOrEmpty(sortOrder))
+                sortOrder = "asc";
+
+            if (sortField == "Givenname")
+            {
+                if (sortOrder == "asc")
+                    query = query.OrderBy(y => y.Givenname);
+                else
+                    query = query.OrderByDescending(y => y.Givenname);
+            }
+
+
+            if (sortField == "CustomerID")
+            {
+                if (sortOrder == "asc")
+                    query = query.OrderBy(y => y.CustomerId);
+                else
+                    query = query.OrderByDescending(y => y.CustomerId);
+            }
+
+            //if (sortField == "AccountID")
+            //{
+            //    if (sortOrder == "asc")
+            //        query = query.OrderBy(y => y.AccountId);
+            //    else
+            //        query = query.OrderByDescending(y => y.AccountId);
+            //}
+
+            if (sortField == "City")
+            {
+                if (sortOrder == "asc")
+                    query = query.OrderBy(y => y.City);
+                else
+                    query = query.OrderByDescending(y => y.City);
+            }
+
+            if (sortField == "Streetaddress")
+            {
+                if (sortOrder == "asc")
+                    query = query.OrderBy(y => y.Streetaddress);
+                else
+                    query = query.OrderByDescending(y => y.Streetaddress);
+
+            }
+
+            if (sortField == "Birthday")
+            {
+                if (sortOrder == "asc")
+                    query = query.OrderBy(y => y.Birthday);
+                else
+                    query = query.OrderByDescending(y => y.Birthday);
+            }
+
+            int pageSize = 50;
+            int howManyItemsToSkip = (page - 1) * pageSize;
+            query = query.Skip(howManyItemsToSkip).Take(pageSize);
+
+            viewModel.ResultList = query
                 .Where(r => q == null || r.Givenname.Contains(q) || r.Surname.Contains(q) || r.City.Contains(q) || r.CustomerId.ToString().Equals(q))
                 .Select(customer => new CustomerViewModel()
                 {
@@ -137,12 +200,19 @@ namespace BankInlupp2Mvc2.Controllers
                     NationalId = customer.NationalId,
                     Telephonecountrycode = customer.Telephonecountrycode,
                     Telephonenumber = customer.Telephonenumber,
-                    Emailaddress = customer.Emailaddress
+                    Emailaddress = customer.Emailaddress,
+                    AccountId = dispositions.FirstOrDefault(r => r.CustomerId == customer.CustomerId).AccountId
                 }).ToList();
+
+            viewModel.q = q;
+            viewModel.SortOrder = sortOrder;
+            viewModel.SortField = sortField;
+            viewModel.Page = page;
+            viewModel.OppositeSortOrder = sortOrder == "asc" ? "desc" : "asc";
             return View(viewModel);
         }
 
-        [Authorize(Roles = "Admin, Cashier")]
+        [Authorize(Roles = "Cashier")]
         public IActionResult CustomerDetails([FromRoute]int id)
         {
             var viewModel = new CustomerDetailsViewModel();
@@ -188,7 +258,7 @@ namespace BankInlupp2Mvc2.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles = "Admin, Cashier")]
+        [Authorize(Roles = "Cashier")]
         public IActionResult CustomerTransactionHistory([FromRoute]int id, string q)
         {
             var viewModel = new CustomerTransactionHistoryListViewModel();
@@ -217,7 +287,7 @@ namespace BankInlupp2Mvc2.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles = "Admin, Cashier")]
+        [Authorize(Roles = "Cashier")]
         public IActionResult GetTransactionsFrom(int skip, int id)
         {
 

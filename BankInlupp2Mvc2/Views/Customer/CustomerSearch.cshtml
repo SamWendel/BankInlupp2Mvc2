@@ -8,10 +8,11 @@
     </form>
 </div>
 <br />
-<table>
+<table style="margin-right:200px">
     <tr>
         <th><a asp-action="CustomerList" asp-route-sortField="Givenname" asp-route-sortOrder="@(Model.SortField == "Givenname" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Name</a></th>
         <th><a asp-action="CustomerList" asp-route-sortField="CustomerID" asp-route-sortOrder="@(Model.SortField == "CustomerID" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Customer ID</a></th>
+        <th><a asp-action="CustomerList" asp-route-sortField="AccountID" asp-route-sortOrder="@(Model.SortField == "AccountID" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Account ID</a></th>
         <th><a asp-action="CustomerList" asp-route-sortField="City" asp-route-sortOrder="@(Model.SortField == "City" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">City</a></th>
         <th><a asp-action="CustomerList" asp-route-sortField="Address" asp-route-sortOrder="@(Model.SortField == "Address" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Address</a></th>
         <th><a asp-action="CustomerList" asp-route-sortField="Birthday" asp-route-sortOrder="@(Model.SortField == "Birthday" ? Model.OppositeSortOrder : "")" asp-route-q="@Model.q">Birthdate</a></th>
@@ -19,7 +20,7 @@
 
     @foreach (var item in Model.ResultList)
     {
-        <tr>
+        <tr style="color:black">
             <td class="td">
                 <a asp-controller="Customer"
                    asp-action="CustomerDetails"
@@ -27,14 +28,15 @@
                    asp-route-id="@item.CustomerId">@item.Givenname @item.Surname</a>
             </td>
             <td class="td">@item.CustomerId</td>
+            <td class="td">@item.AccountId</td>
             <td class="td">@item.City</td>
             <td class="td">@item.Streetaddress</td>
             <td class="td">@item.Birthday.ToString("yyyy-MM-dd")</td>
         </tr>
     }
     <tfoot>
-        <tr>
-            <td colspan="5">
+        <tr class="ignore-css">
+            <td class="ignore-css" colspan="5">
                 <nav aria-label="...">
                     <ul class="pagination">
                         <li class="page-item">
@@ -47,7 +49,6 @@
                                asp-route-page="@(Model.Page - 1)"
                                asp-route-q="@Model.q">Previous</a>
                         </li>
-
                         <li class="page-item">
                             <a class="page-link"
                                asp-controller="Customer"

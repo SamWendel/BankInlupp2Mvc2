@@ -3,15 +3,16 @@
     ViewData["Title"] = "Withdraw";
 }
 
-<h2>Current balance: @Model.Balance kr</h2>
+<h2 style="color:black">Balance: @Model.Balance kr</h2>
 <br />
 <br />
-<div style="margin-right:100px">
+<div style="margin-right:100px; color:black">
     <form asp-controller="Account" asp-action="Withdraw" method="post">
         <h3>Amount</h3>
         <input class="form-control" asp-for="Amount">
-        <button type="submit" class="btn btn-primary">Withdraw</button>
+        @Html.ValidationMessageFor(m => m.Error)
+        <br />
+        <button type="submit" class="btn btn-info">Withdraw</button>
     </form>
 </div>
-@Html.ValidationMessageFor(m => m.Error)
 

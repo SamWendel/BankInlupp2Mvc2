@@ -25,14 +25,14 @@ namespace BankUnitTests
             var account1 = new Accounts
             {
                 AccountId = 1,
-                Frequency = "Cool",
+                Frequency = "Monthly",
                 Created = DateTime.Now,
                 Balance = 2000
             };
             var account2 = new Accounts
             {
                 AccountId = 2,
-                Frequency = "Cool",
+                Frequency = "Monthly",
                 Created = DateTime.Now,
                 Balance = 2000
             };
@@ -85,7 +85,7 @@ namespace BankUnitTests
         }
 
         [Test]
-        public void ValidatexTransaction()
+        public void ValidatexOverdrawnTransaction()
         {
             var viewModel = new TransactionViewModel
             {
@@ -95,8 +95,22 @@ namespace BankUnitTests
                 RecieverId = 2
             };
             var actionResult = sut.Transaction(viewModel, 1, 2, 2001);
-            var viewResult = actionResult as RedirectToActionResult;
-            Assert.AreEqual("AccountIndex", viewResult.ActionName);
+            var viewResult = actionResult as ViewResult;
+            Assert.IsFalse(viewResult.ViewData.ModelState.IsValid);
+        }
+
+        [Test]
+        public void ValidatexOverdrawnWithdrawal()
+        {
+            var viewModel = new WithdrawViewModel
+            {
+                Amount = 2001,
+                Balance = 2000,
+                Error = "Invalid amount"
+            };
+            var actionResult = sut.Withdraw(viewModel, 1, 2001);
+            var viewResult = actionResult as ViewResult;
+            Assert.IsFalse(viewResult.ViewData.ModelState.IsValid);
         }
 
         [Test]
@@ -109,8 +123,8 @@ namespace BankUnitTests
                 Error = "Invalid amount"
             };
             var actionResult = sut.Withdraw(viewModel, 1, -20);
-            var viewResult = actionResult as RedirectToActionResult;
-            Assert.AreEqual("AccountIndex", viewResult.ActionName);
+            var viewResult = actionResult as ViewResult;
+            Assert.IsFalse(viewResult.ViewData.ModelState.IsValid);
         }
 
 
@@ -124,8 +138,8 @@ namespace BankUnitTests
                 Error = "Invalid amount"
             };
             var actionResult = sut.Deposit(viewModel, 1, -20);
-            var viewResult = actionResult as RedirectToActionResult;
-            Assert.AreEqual("AccountIndex", viewResult.ActionName);
+            var viewResult = actionResult as ViewResult;
+            Assert.IsFalse(viewResult.ViewData.ModelState.IsValid);
         }
     }
 }

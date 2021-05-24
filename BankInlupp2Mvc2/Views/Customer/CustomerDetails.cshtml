@@ -5,13 +5,20 @@
 
 @foreach (var customer in Model.Customers)
 {
-    <div class="container-fluid">
+    <div style="color:black" class="container-fluid">
         <h2>@customer.Givenname @customer.Surname</h2>
-        <img src="~/img/blank-profile-picture-973460_1280-1.png" alt="blank profile" width="180" height="200">
+        @if (customer.Gender == "male")
+        {
+            <img src="~/img/img_avatar.png" alt="blank profile" width="180" height="200">
+        }
+        else
+        {
+            <img src="~/img/img_avatar2.png" alt="blank profile" width="180" height="200">
+        }
         <br />
         <br />
         <div>
-            <table>
+            <table class="ignore-css">
                 <tr>
                     <th><a asp-controller="Account" asp-action="Deposit" asp-route-id="@customer.AccountId">Deposit</a></th>
                     <th><a asp-controller="Account" asp-action="Transaction" asp-route-id="@customer.AccountId">Transfer</a></th>
